@@ -13,7 +13,7 @@ const updateFormValue = (setter) => {
   return (e) => {
     e.preventDefault()
     let val = e.currentTarget.value
-    if (typeof(val) === 'string' && parseInt(val)!==NaN) val = parseInt(val) 
+    if (typeof(val) === 'string' && !isNaN(parseInt(val))) val = parseInt(val) 
     setter(e.currentTarget.value)
   }
 }
@@ -21,6 +21,19 @@ const updateFormValue = (setter) => {
 function App() {
   const [focusTime, setFocusTime] = useState(20)
   const [meditationTime, setMeditationTime] = useState(5)
+  const [timer, setTimer] = useState(undefined)
+
+  const decrementTime = (time, timeSetter) => {
+    console.log('time:', time)
+    const decrementer = () => {
+      timeSetter(time - 1)
+      if (time < 1) {
+        console.log('we done: ', time)
+        window.clearInterval(timer)
+      }
+    }
+    setTimer(window.setInterval(decrementer, 10))
+  }
 
   return (
     <div className="App">
@@ -32,12 +45,15 @@ function App() {
           )}
       </select>
       <h1>{focusTime}min</h1>
-      <select name="meditationTime" defaultValue={5} onChange={updateFormValue(setFocusTime)}>
+      <select name="meditationTime" defaultValue={5} onChange={updateFormValue(setMeditationTime)}>
           {range(1,16).map(n=>
-            <option value={n}>{n}min</option>
+            <option key={n} value={n}>{n}min</option>
           )}
       </select>
       <h1>{meditationTime}min</h1>
+      <div className='startButton' onClick={()=>decrementTime(focusTime, setFocusTime)}>start</div>
+      <div className='pauseButton' onClick={undefined}>pause</div>
+      <div className='resetButton' onClick={undefined}>reset</div>
 </div>
   );
 }
