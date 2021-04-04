@@ -1,24 +1,44 @@
-import logo from './logo.svg';
+import { React, useState } from 'react'
 import './App.css';
 
+
+const range = (n1, n2) => {
+  if (!n2) {
+    return [...Array(n2).keys()];
+  }
+  return [...Array(n2).keys()].slice(n1, n2);
+}
+
+const updateFormValue = (setter) => {
+  return (e) => {
+    e.preventDefault()
+    let val = e.currentTarget.value
+    if (typeof(val) === 'string' && parseInt(val)!==NaN) val = parseInt(val) 
+    setter(e.currentTarget.value)
+  }
+}
+
 function App() {
+  const [focusTime, setFocusTime] = useState(20)
+  const [meditationTime, setMeditationTime] = useState(5)
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <h1>Welcome to Brain Sprout!</h1>
+      <h3>Set Focus Time</h3>
+      <select name="focusTime" defaultValue={20} onChange={updateFormValue(setFocusTime)}>
+          {range(1,31).map(n=>
+            <option value={n}>{n}min</option>
+          )}
+      </select>
+      <h1>{focusTime}min</h1>
+      <select name="meditationTime" defaultValue={5} onChange={updateFormValue(setFocusTime)}>
+          {range(1,16).map(n=>
+            <option value={n}>{n}min</option>
+          )}
+      </select>
+      <h1>{meditationTime}min</h1>
+</div>
   );
 }
 
