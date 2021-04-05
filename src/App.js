@@ -32,7 +32,7 @@ function App() {
         window.clearInterval(timer)
       }
     }
-    setTimer(window.setInterval(decrementer, 10))
+    setTimer(window.setInterval(decrementer, 500))
   }
 
   return (
@@ -54,7 +54,7 @@ function App() {
       <div className='startButton' onClick={()=>decrementTime(focusTime, setFocusTime)}>start</div>
       <div className='pauseButton' onClick={undefined}>pause</div>
       <div className='resetButton' onClick={undefined}>reset</div>
-</div>
+    </div>  
   );
 }
 
