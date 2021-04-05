@@ -18,22 +18,76 @@ const updateFormValue = (setter) => {
   }
 }
 
+
+
 function App() {
   const [focusTime, setFocusTime] = useState(20)
   const [meditationTime, setMeditationTime] = useState(5)
   const [timer, setTimer] = useState(undefined)
+  var time_help;
+  var newTime;
+  var remaining_time;
+  var isPaused = false;
 
-  const decrementTime = (time, timeSetter) => {
-    console.log('time:', time)
-    const decrementer = () => {
-      timeSetter(time - 1)
-      if (time < 1) {
-        console.log('we done: ', time)
-        window.clearInterval(timer)
+
+  // const decrementTime = (time, timeSetter) => {
+  //   console.log('time:', time)
+  //   const decrementer = () => {
+  //     timeSetter(time - 1)
+  //     if (time < 1) {
+  //       console.log('we done: ', time)
+  //       window.clearInterval(timer)
+  //     }
+  //   }
+  //   setTimer(window.setInterval(decrementer, 500))
+  // }
+
+  const startTimer = (amount) => {
+    if (isPaused) {
+      newTime = new Date(Date.parse(new Date()) + remaining_time);
+      isPaused = false;
+      runTimer(newTime);
+    } else {
+        clearInterval(time_help); 
+        var current = Date.parse(new Date());
+        newTime = new Date(current + amount*60*1000);
+        runTimer(newTime);
+      }
+  }
+
+  const runTimer = (newTime) => {
+    function decrement(){
+      document.getElementById("time").innerHTML = remain(newTime).minutes + "m " + remain(newTime).seconds + "s ";  
+      if(remain(newTime).total<=0){ 
+        clearInterval(time_help); 
       }
     }
-    setTimer(window.setInterval(decrementer, 500))
+    decrement();
+    time_help = setInterval(decrement,1000);
   }
+
+  function remain(newTime){
+    var total = Date.parse(newTime) - Date.parse(new Date());
+    var seconds = Math.floor((total/1000)% 60);
+    var minutes = Math.floor((total/1000/60)%60);
+    return {'total':total, 'minutes':minutes, 'seconds':seconds};
+  }
+
+  
+  const stopTimer = () => {
+    if (!isPaused) {
+      clearInterval(time_help);
+      remaining_time = remain(newTime).total;
+      isPaused = true;
+    }
+  }
+
+
+  const resetTimer = () => {
+    clearInterval(time_help);
+    document.getElementById("time").innerHTML = "";
+  }
+
 
   return (
     <div className="App">
@@ -44,16 +98,16 @@ function App() {
             <option value={n}>{n}min</option>
           )}
       </select>
-      <h1>{focusTime}min</h1>
+      <h1 id = "time"></h1>
       <select name="meditationTime" defaultValue={5} onChange={updateFormValue(setMeditationTime)}>
           {range(1,16).map(n=>
             <option key={n} value={n}>{n}min</option>
           )}
       </select>
       <h1>{meditationTime}min</h1>
-      <div className='startButton' onClick={()=>decrementTime(focusTime, setFocusTime)}>start</div>
-      <div className='pauseButton' onClick={undefined}>pause</div>
-      <div className='resetButton' onClick={undefined}>reset</div>
+      <div className='startButton' onClick={()=>startTimer(focusTime)}>start</div>
+      <div className='pauseButton' onClick={()=>stopTimer()}>pause</div>
+      <div className='resetButton' onClick={()=>resetTimer()}>reset</div>
     </div>  
   );
 }
