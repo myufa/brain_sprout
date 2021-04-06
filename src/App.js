@@ -42,6 +42,34 @@ function App() {
   //   setTimer(window.setInterval(decrementer, 500))
   // }
 
+
+  const returnFocus = () => {
+    //clearing the youtube video and button and returning to the meditation
+    console.log('lets focus bb');
+    document.getElementById("youtube").remove();
+    document.getElementById("youtubeButton").remove();
+    startTimer(focusTime);
+  }
+
+  const startMeditation = () => {
+    console.log("We meditating bitches");
+
+    let temp = document.createElement("iframe");
+    temp.style.width = '420';
+    temp.style.height = '315';
+    temp.src = 'https://www.youtube.com/embed/zSkFFW--Ma0';
+    temp.setAttribute('id', 'youtube');
+    document.getElementById("root").appendChild(temp);
+    // document.getElementById("youtube").append("<iframe width='420' height='315'src='https://www.youtube.com/embed/zSkFFW--Ma0'></iframe>");
+
+    // continue button
+    let button_str = document.createElement("button");
+    button_str.innerHTML = "Return Focus";
+    button_str.setAttribute("id", "youtubeButton");
+    button_str.addEventListener("click", returnFocus);
+    document.getElementById("root").appendChild(button_str);
+  }
+
   const startTimer = (amount) => {
     if (isPaused) {
       newTime = new Date(Date.parse(new Date()) + remaining_time);
@@ -58,8 +86,22 @@ function App() {
   const runTimer = (newTime) => {
     function decrement(){
       document.getElementById("time").innerHTML = remain(newTime).minutes + "m " + remain(newTime).seconds + "s ";  
+      let tree_element = document.getElementById("tree");
+      if(remain(newTime).minutes>=15){
+        tree_element.src = "trees0.png"
+      }
+      if(remain(newTime).minutes<15 && remain(newTime).minutes>=10){
+        tree_element.src = "trees1.png"
+      }
+      if(remain(newTime).minutes<10 && remain(newTime).minutes>=5){
+        tree_element.src = "trees2.png"
+      }
+      if(remain(newTime).minutes<5){
+        tree_element.src = "trees3.png"
+      }
       if(remain(newTime).total<=0){ 
         clearInterval(time_help); 
+        startMeditation();
       }
     }
     decrement();
@@ -108,6 +150,7 @@ function App() {
       <div className='startButton' onClick={()=>startTimer(focusTime)}>start</div>
       <div className='pauseButton' onClick={()=>stopTimer()}>pause</div>
       <div className='resetButton' onClick={()=>resetTimer()}>reset</div>
+      <img id="tree" src="trees0.png"></img>
     </div>  
   );
 }
