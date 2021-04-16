@@ -1,4 +1,4 @@
-import { React, useState } from 'react'
+import { React, useState, useRef } from 'react'
 import './App.css';
 
 
@@ -23,24 +23,13 @@ const updateFormValue = (setter) => {
 function App() {
   const [focusTime, setFocusTime] = useState(20)
   const [meditationTime, setMeditationTime] = useState(5)
-  const [timer, setTimer] = useState(undefined)
   var time_help;
   var newTime;
   var remaining_time;
   var isPaused = false;
+  const isRunning = useRef(false);
 
 
-  // const decrementTime = (time, timeSetter) => {
-  //   console.log('time:', time)
-  //   const decrementer = () => {
-  //     timeSetter(time - 1)
-  //     if (time < 1) {
-  //       console.log('we done: ', time)
-  //       window.clearInterval(timer)
-  //     }
-  //   }
-  //   setTimer(window.setInterval(decrementer, 500))
-  // }
 
 
   const returnFocus = () => {
@@ -52,7 +41,6 @@ function App() {
   }
 
   const startMeditation = () => {
-    console.log("We meditating bitches");
 
     let temp = document.createElement("iframe");
     temp.style.width = '420';
@@ -71,20 +59,24 @@ function App() {
   }
 
   const startTimer = (amount) => {
+    if (isRunning.current) {
+      return;
+    }
+    isRunning.current = true;
     if (isPaused) {
       newTime = new Date(Date.parse(new Date()) + remaining_time);
       isPaused = false;
-      runTimer(newTime);
+      runTimer();
     } else {
-        clearInterval(time_help); 
+        clearInterval(time_help);
         var current = Date.parse(new Date());
         newTime = new Date(current + amount*60*1000);
-        runTimer(newTime);
-      }
+        runTimer();
+    }
   }
 
-  const runTimer = (newTime) => {
-    function decrement(){
+  const runTimer = () => {
+    time_help = setInterval(function() {
       document.getElementById("time").innerHTML = remain(newTime).minutes + "m " + remain(newTime).seconds + "s ";  
       let tree_element = document.getElementById("tree");
       if(remain(newTime).minutes>=15){
@@ -103,10 +95,9 @@ function App() {
         clearInterval(time_help); 
         startMeditation();
       }
-    }
-    decrement();
-    time_help = setInterval(decrement,1000);
+    },1000);
   }
+  
 
   function remain(newTime){
     var total = Date.parse(newTime) - Date.parse(new Date());
@@ -121,6 +112,7 @@ function App() {
       clearInterval(time_help);
       remaining_time = remain(newTime).total;
       isPaused = true;
+      isRunning.current = false;
     }
   }
 
@@ -128,7 +120,9 @@ function App() {
   const resetTimer = () => {
     clearInterval(time_help);
     document.getElementById("time").innerHTML = "";
+    isRunning.current = false;
   }
+
 
 
   return (
