@@ -1,5 +1,29 @@
+* {
+  background-color: #FFF2CC;
+  font-family: 'Lato', sans-serif;
+}
+
 .App {
   text-align: center;
+}
+
+.title {
+  color: #38761D;
+  font-weight: 500;
+  font-size: 50px;
+}
+
+.controls {
+  margin-left: auto;
+  padding-right: 100px;
+  padding-top: 100px;
+  width: max-content
+}
+
+iframe {
+  position: absolute;
+  left: 350px;
+  top: 255px;
 }
 
 .startButton {
@@ -25,3 +49,8 @@
   cursor: pointer;
 }
 
+img {
+  margin-top: 35px;
+  max-width: 160px;
+  max-height: 280px;
+}
