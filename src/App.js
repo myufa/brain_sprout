@@ -1,6 +1,8 @@
 import { React, useState, useRef } from 'react'
 import './App.css';
 
+var TOTAL_TIME_SECONDS = 0;
+var FINISHED = false;
 
 const range = (n1, n2) => {
   if (!n2) {
@@ -40,7 +42,6 @@ function App() {
   const isRunning = useRef(false);
 
   const startMeditation = () => {
-
     let temp = document.createElement("iframe");
     temp.src = randomItem(meditationVideoUrls)
     temp.setAttribute('id', 'youtube');
@@ -66,10 +67,34 @@ function App() {
         newTime = new Date(current + amount*60*1000);
         runTimer();
     }
+
+    let button = document.getElementById('endSessionButton');
+    button.textContent = "end session";
+
+  }
+
+  const endSession = () => {
+    // console.log("The sesssion has ended");
+    FINISHED = true;
+    document.getElementById("title").textContent = "Great Work Session!";
+    document.getElementById("youtube-div").remove();
+    document.getElementById("tree").remove();
+    document.getElementById("controls").remove();
+    let finalTime = document.createElement("h2");
+    console.log(TOTAL_TIME_SECONDS)
+    let TOTAL_TIME_MINUTES = Math.floor(TOTAL_TIME_SECONDS / 60)
+    let finalTimeText = "You worked for " + TOTAL_TIME_MINUTES + " minutes and " + (TOTAL_TIME_SECONDS % 60) + " seconds";
+    finalTime.textContent = finalTimeText;
+    document.getElementById("left-flex").appendChild(finalTime);
+
   }
 
   const runTimer = () => {
     time_help = setInterval(function() {
+      if (FINISHED) {
+        return;
+      }
+      TOTAL_TIME_SECONDS += 1;
       document.getElementById("time").innerHTML = remain(newTime).minutes + "m " + remain(newTime).seconds + "s ";  
       let tree_element = document.getElementById("tree");
       let time_left = remain(newTime).minutes + ((remain(newTime).seconds/60))
@@ -128,12 +153,12 @@ function App() {
   return (
     <div className="App" id='app'>
       <div className="flexbox">
-        <div className="left-flex">
-          <h1 className='title'>Welcome to Brain Sprout!</h1>
+        <div id="left-flex">
+          <h1 id='title'>Welcome to Brain Sprout!</h1>
           <div id="youtube-div"></div>
           <img id="tree" src="trees0.png"></img>
         </div>
-        <div className='controls'>
+        <div id='controls'>
           <h3>Set Focus Time</h3>
           <select name="focusTime" defaultValue={20} onChange={updateFormValue(setFocusTime)}>
               {range(1,31).map(n=>
@@ -144,6 +169,7 @@ function App() {
           <div className='startButton' onClick={()=>startTimer(focusTime)}>start</div>
           <div className='pauseButton' onClick={()=>stopTimer()}>pause</div>
           <div className='resetButton' onClick={()=>resetTimer()}>reset</div>
+          <div id='endSessionButton' onClick={()=>endSession()}></div>
         </div>
       </div>
       
