@@ -35,7 +35,7 @@ const meditationVideoUrls = [
 function App() {
   const [focusTime, setFocusTime] = useState(20)
   const [meditationTime, setMeditationTime] = useState(5)
-  var time_help;
+  const time_help = useRef(0);
   var newTime;
   var remaining_time;
   var isPaused = false;
@@ -62,7 +62,7 @@ function App() {
       isPaused = false;
       runTimer();
     } else {
-        clearInterval(time_help);
+        clearInterval(time_help.current);
         var current = Date.parse(new Date());
         newTime = new Date(current + amount*60*1000);
         runTimer();
@@ -82,7 +82,7 @@ function App() {
     document.getElementById("controls").remove();
     let finalTime = document.createElement("h2");
     console.log(TOTAL_TIME_SECONDS)
-    let TOTAL_TIME_MINUTES = Math.floor(TOTAL_TIME_SECONDS / 60)
+    let TOTAL_TIME_MINUTES = Math.floor(TOTAL_TIME_SECONDS / 60);
     let finalTimeText = "You worked for " + TOTAL_TIME_MINUTES + " minutes and " + (TOTAL_TIME_SECONDS % 60) + " seconds";
     finalTime.textContent = finalTimeText;
     document.getElementById("left-flex").appendChild(finalTime);
@@ -90,7 +90,7 @@ function App() {
   }
 
   const runTimer = () => {
-    time_help = setInterval(function() {
+    time_help.current = setInterval(function() {
       if (FINISHED) {
         return;
       }
@@ -115,7 +115,7 @@ function App() {
         console.log(tree_element.src, time_left)
       } 
       else { 
-        clearInterval(time_help); 
+        clearInterval(time_help.current); 
         resetTimer()
         startMeditation();
       }
@@ -133,7 +133,7 @@ function App() {
   
   const stopTimer = () => {
     if (!isPaused) {
-      clearInterval(time_help);
+      clearInterval(time_help.current);
       remaining_time = remain(newTime).total;
       isPaused = true;
       isRunning.current = false;
@@ -142,7 +142,7 @@ function App() {
 
 
   const resetTimer = () => {
-    clearInterval(time_help);
+    clearInterval(time_help.current);
     document.getElementById("time").innerHTML = "";
     isRunning.current = false;
     isPaused = false
