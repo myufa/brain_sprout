@@ -45,6 +45,7 @@ function App() {
     let temp = document.createElement("iframe");
     temp.src = randomItem(meditationVideoUrls)
     temp.setAttribute('id', 'youtube');
+    temp.alt = "meditation video"
     document.getElementById("youtube-div").appendChild(temp);
     // document.getElementById("youtube").append("<iframe width='420' height='315'src='https://www.youtube.com/embed/zSkFFW--Ma0'></iframe>");
 
@@ -100,18 +101,22 @@ function App() {
       let time_left = remain(newTime).minutes + ((remain(newTime).seconds/60))
       if(time_left>=(3*(focusTime/4))){
         tree_element.src = "trees0.png"
+        tree_element.alt = "smallest tree size"
         console.log(tree_element.src, time_left, (3*focusTime/4))
       }
       else if(time_left>=(focusTime/2) ){
         tree_element.src = "trees1.png"
+        tree_element.alt = "small tree size"
         console.log(tree_element.src, time_left, (focusTime/2))
       }
       else if(time_left>(focusTime/4)){
         tree_element.src = "trees2.png"
+        tree_element.alt = "medium tree size"
         console.log(tree_element.src, time_left, (focusTime/4))
       }
       else if(time_left>0){
         tree_element.src = "trees3.png"
+        tree_element.alt = "large tree size"
         console.log(tree_element.src, time_left)
       } 
       else { 
@@ -133,8 +138,8 @@ function App() {
   
   const stopTimer = () => {
     if (!isPaused) {
-      clearInterval(time_help.current);
       remaining_time = remain(newTime).total;
+      clearInterval(time_help.current);
       isPaused = true;
       isRunning.current = false;
     }
@@ -156,7 +161,7 @@ function App() {
         <div id="left-flex">
           <h1 id='title'>Welcome to Brain Sprout!</h1>
           <div id="youtube-div"></div>
-          <img id="tree" src="trees0.png"></img>
+          <img id="tree" src="trees0.png" alt="smallest tree"></img>
         </div>
         <div id='controls'>
           <h3>Set Focus Time</h3>
