@@ -13,6 +13,18 @@
   font-size: 50px;
 }
 
+.flexbox {
+  display: flex;
+}
+
+.left-flex {
+  flex-grow: 4;
+}
+
+#youtube-div{
+  align-items: center;
+}
+
 .controls {
   margin-left: auto;
   padding-right: 100px;
@@ -21,9 +33,11 @@
 }
 
 iframe {
-  position: absolute;
   left: 350px;
-  top: 255px;
+  top: 25px;
+  height: 400px;
+  width: 600px;
+  text-align: center;
 }
 
 .startButton {

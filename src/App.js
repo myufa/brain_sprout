@@ -42,11 +42,9 @@ function App() {
   const startMeditation = () => {
 
     let temp = document.createElement("iframe");
-    temp.style.width = '420';
-    temp.style.height = '315';
     temp.src = randomItem(meditationVideoUrls)
     temp.setAttribute('id', 'youtube');
-    document.getElementById("app").appendChild(temp);
+    document.getElementById("youtube-div").appendChild(temp);
     // document.getElementById("youtube").append("<iframe width='420' height='315'src='https://www.youtube.com/embed/zSkFFW--Ma0'></iframe>");
 
   }
@@ -129,20 +127,26 @@ function App() {
 
   return (
     <div className="App" id='app'>
-      <h1 className='title'>Welcome to Brain Sprout!</h1>
-      <div className='controls'>
-        <h3>Set Focus Time</h3>
-        <select name="focusTime" defaultValue={20} onChange={updateFormValue(setFocusTime)}>
-            {range(1,31).map(n=>
-              <option value={n}>{n}min</option>
-            )}
-        </select>
-        <h1 id='time'></h1>
-        <div className='startButton' onClick={()=>startTimer(focusTime)}>start</div>
-        <div className='pauseButton' onClick={()=>stopTimer()}>pause</div>
-        <div className='resetButton' onClick={()=>resetTimer()}>reset</div>
+      <div className="flexbox">
+        <div className="left-flex">
+          <h1 className='title'>Welcome to Brain Sprout!</h1>
+          <div id="youtube-div"></div>
+          <img id="tree" src="trees0.png"></img>
+        </div>
+        <div className='controls'>
+          <h3>Set Focus Time</h3>
+          <select name="focusTime" defaultValue={20} onChange={updateFormValue(setFocusTime)}>
+              {range(1,31).map(n=>
+                <option value={n}>{n}min</option>
+              )}
+          </select>
+          <h1 id='time'></h1>
+          <div className='startButton' onClick={()=>startTimer(focusTime)}>start</div>
+          <div className='pauseButton' onClick={()=>stopTimer()}>pause</div>
+          <div className='resetButton' onClick={()=>resetTimer()}>reset</div>
+        </div>
       </div>
-      <img id="tree" src="trees0.png"></img>
+      
     </div>  
   );
 }
