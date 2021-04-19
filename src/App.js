@@ -45,7 +45,6 @@ function App() {
     let temp = document.createElement("iframe");
     temp.src = randomItem(meditationVideoUrls)
     temp.setAttribute('id', 'youtube');
-    temp.alt = "meditation video"
     document.getElementById("youtube-div").appendChild(temp);
     // document.getElementById("youtube").append("<iframe width='420' height='315'src='https://www.youtube.com/embed/zSkFFW--Ma0'></iframe>");
 
